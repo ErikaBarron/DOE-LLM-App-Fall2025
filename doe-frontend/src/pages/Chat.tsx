@@ -137,7 +137,9 @@ const Chat = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioChunksRef.current = [];
 
-      const mediaRecorder = new MediaRecorder(stream);
+  // Force a codec that Whisper + Chrome both support
+    const mediaRecorder = new MediaRecorder(stream, {mimeType: "audio/webm"});
+
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = (event: BlobEvent) => {
@@ -148,7 +150,7 @@ const Chat = () => {
 
       mediaRecorder.onstop = async () => {
         // Combine chunks into a single blob (wav/webm)
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+	const audioBlob = new Blob(audioChunksRef.current, {type: mediaRecorderRef.current.mimeType});
         await sendAudioToBackend(audioBlob);
 
         // Stop all tracks on the stream to free the mic
@@ -187,8 +189,12 @@ const Chat = () => {
 
   const sendAudioToBackend = async (blob: Blob) => {
     const backendUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+
+    console.log("Sent audio blob:", blob.type, blob.size);  // ← DEBUG LOG
+
+
     const formData = new FormData();
-    formData.append('audio', blob, 'recording.wav');
+	formData.append("audio", audioBlob, "recording.webm");
 
     try {
       const response = await fetch(`${backendUrl}/api/stt`, {
