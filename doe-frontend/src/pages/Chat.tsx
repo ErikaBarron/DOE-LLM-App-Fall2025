@@ -194,7 +194,7 @@ const Chat = () => {
 
 
     const formData = new FormData();
-	formData.append("audio", audioBlob, "recording.webm");
+	formData.append("audio", blob, "recording.webm");
 
     try {
       const response = await fetch(`${backendUrl}/api/stt`, {
