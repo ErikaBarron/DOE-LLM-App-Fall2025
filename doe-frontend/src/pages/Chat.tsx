@@ -50,6 +50,31 @@ const Chat = () => {
     }
   }, [loading]);
 
+  // TTS toggle
+  const [ttsEnabled, setTtsEnabled] = useState(false);
+
+  function speakText(text: string) {
+    if (!ttsEnabled) return;
+
+    const synth = window.speechSynthesis;
+    const utter = new SpeechSynthesisUtterance(text);
+
+    utter.rate = 1;
+    utter.pitch = 1;
+    utter.volume = 1;
+
+    // optionally choose a nicer voice
+    const voices = synth.getVoices();
+    if (voices.length > 0) {
+      utter.voice =
+        voices.find(v => v.name.includes("Female") || v.name.includes("Microsoft"))
+        || voices[0];
+    }
+
+    synth.speak(utter);
+  }
+
+
   // ----- Search / RAG call -----
   const handleSearch = async (query?: string) => {
     const userQuery = query ?? searchInput;
@@ -92,6 +117,10 @@ const Chat = () => {
           originalQuery: userQuery,
         },
       ]);
+
+      // Speak the summary
+      speakText(data.summary);
+
     } catch (err) {
       console.error('Search Error:', err);
 
@@ -370,6 +399,17 @@ const Chat = () => {
           >
             <MicrophoneIcon className="h-8 w-8" />
           </button>
+
+          <button
+            onClick={() => setTtsEnabled(v => !v)}
+            className={`${
+              ttsEnabled ? 'bg-green-600' : 'bg-gray-600 hover:bg-gray-700'
+            } text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-full transition-colors duration-200 flex items-center justify-center`}
+            title={ttsEnabled ? 'Disable speech output' : 'Enable speech output'}
+          >
+  <SpeakerWaveIcon className="h-8 w-8" />
+</button>
+
 
           <input
             ref={inputRef}
