@@ -123,9 +123,14 @@ def create_app(test_config=None):
 
             audio_file = request.files["audio"]
 
+            size = len(audio_file.read())    # read to check size
+            print("Received:", audio_file.filename, "size:", size)
+            audio_file.seek(0)               # reset pointer after read
+
+
             # Save audio to temp file
             import tempfile
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
+	    with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
                 audio_file.save(tmp.name)
                 temp_path = tmp.name
 
