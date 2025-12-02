@@ -5,9 +5,7 @@ import doeLogo from '../assets/images/doe-logo-final.png';
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
 import { MicrophoneIcon } from '@heroicons/react/24/outline';
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
-
-import man from '../assets/images/man.png';
-import man2 from '../assets/images/man2.png';
+import OrbAnimation from '../components/orb';
 
 interface Message {
   sender: 'system' | 'bot' | 'user';
@@ -255,18 +253,22 @@ const Chat = () => {
 
   // ----- Render -----
   return (
-    <div className="flex flex-col max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-4 min-h-screen">
-      <div className="text-white font-bold text-4xl text-center pb-10">DOE ORACLE</div>
-
-      <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black rounded-xl border border-violet-900/30 shadow-lg shadow-violet-900/20 p-3 sm:p-6 mb-4 sm:mb-6 overflow-hidden">
-        <div className="flex items-center justify-center space-x-32">
-          <div className="pt-10 text-white font-bold text-4xl text-center pb-10">
-            ORACLE
-            <img src={man} alt="Oracle" className="h-[200px] pt-10 object-contain" />
-          </div>
-          <div className="pt-10 text-white font-bold text-4xl text-center pb-10">
-            USER
-            <img src={man2} alt="User" className="h-[200px] pt-10 object-contain" />
+   <div className="flex flex-col max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-4 min-h-screen">
+     {/* Title removed as it was empty */}
+     {/* <motion.h1 ... /> */}
+     {/* Added the oracle logo on top of the orb*/}
+      <div className="flex justify-center pb-10">
+        <img
+          src = {doeLogo}
+          alt = "DOE Logo"
+          className="h-20 w-auto sm:h-24 md:h-28"
+         />
+      </div>
+    {/* Added dancingOrb from orb file */} 
+     <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black rounded-xl border border-violet-900/30 shadow-lg shadow-violet-900/20 p-3 sm:p-6 mb-4 sm:mb-6 overflow-hidden">
+        <div className="flex justify-center py-16">
+          <div className="flex items-center justify-center">
+            <OrbAnimation isThinking={loading} />
           </div>
         </div>
 
@@ -403,7 +405,7 @@ const Chat = () => {
           <button
             onClick={() => setTtsEnabled(v => !v)}
             className={`${
-              ttsEnabled ? 'bg-green-600' : 'bg-gray-600 hover:bg-gray-700'
+              ttsEnabled ? 'bg-violet-600' : 'bg-gray-600 hover:bg-gray-700'
             } text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-full transition-colors duration-200 flex items-center justify-center`}
             title={ttsEnabled ? 'Disable speech output' : 'Enable speech output'}
           >
