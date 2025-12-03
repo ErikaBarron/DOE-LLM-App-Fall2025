@@ -12,3 +12,4 @@ instance/ciobrain.sqlite
 instance/knowledge/vector_store/
 instance/vector_store/
 *.log
+venv/

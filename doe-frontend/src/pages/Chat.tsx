@@ -30,6 +30,13 @@ const Chat = () => {
   const [error, setError] = useState<string | null>(null);
   const [placeholder, setPlaceholder] = useState('Ask DOE anything...');
 
+  //states for structured test input through form 
+  const [testCaseForm, setTestCaseForm] = useState(false);
+  const [systemName, setSystemName] = useState('');
+  const [testType, setTestType] = useState('');
+  const [constraints, setConstraints] = useState('');
+  const [requirements, setRequirements] = useState('');
+
   // STT / recording state
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -387,6 +394,75 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
+      
+      {/*Input Structured Input To Generate Test*/}
+      {testCaseForm && (
+        <div className="mb-4 bg-gray-800 border-blue-600/50 p-3 rounded-lg border border-blue-600/50 max-w-2xl mx-auto">
+          <h3 className="text-white font-semibold mb-2">Generate Test Cases</h3>
+          <input
+            type="text"
+            placeholder="Name of System" //enter name of the system 
+            value={systemName}
+            onChange={(e) => setSystemName(e.target.value)}
+            className="w-full mb-2 px-3 py-2 rounded bg-gray-700 text-white"
+          />
+          <input
+            type="text"
+            placeholder="Type of Test" //enter the type of test that should be performed (MC/DC, equivalence testing, etc.)
+            value={testType}
+            onChange={(e) => setTestType(e.target.value)}
+            className="w-full mb-2 px-3 py-2 rounded bg-gray-700 text-white"
+          />
+          <textarea
+            placeholder="Requirements" //enter any requirements for the test cases or the system 
+            value={requirements}
+            onChange={(e) => setRequirements(e.target.value)}
+            className="w-full mb-2 px-3 py-2 rounded bg-gray-700 text-white"
+            rows={3}
+          />
+          <textarea
+            placeholder="Constraints"
+            value={constraints}
+            onChange={(e) => setConstraints(e.target.value)}
+            className="w-full mb-2 px-3 py-2 rounded bg-gray-700 text-white"
+            rows={3}
+          />
+          <div className="flex space-x-2">
+            <button
+              onClick={() => {
+                setMessages(prev => [
+                  ...prev,
+                  { sender: 'user', text: `Structured test case input:\nSystem: ${systemName}\nTest Type: ${testType}\nRequirements: ${requirements}\nConstraints: ${constraints}` },
+                  { sender: 'bot', text: 'Generating test cases...' }
+                ]);
+                setTestCaseForm(false);
+                setSystemName(''); setTestType(''); setConstraints('');
+              }}
+              className="bg-purple-600 text-white px-4 py-2 rounded"
+            >
+              Generate
+            </button>
+            <button
+              onClick={() => setTestCaseForm(false)}
+              className="bg-gray-600 text-white px-4 py-2 rounded"
+            >
+              Exit
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/*Show Test Case Button*/}
+      {!testCaseForm && (
+        <div className="mb-4 flex justify-center">
+          <button
+            onClick={() => setTestCaseForm(true)}
+            className="bg-blue-600 px-4 py-2 text-white rounded hover:bg-blue-700"
+          >
+            Generate Test Cases
+          </button>
+        </div>
+      )}
 
       {/* Input Area */}
       <div className="mt-auto p-3 sm:p-5 bg-gray-800 rounded-xl border border-blue-500/30">
@@ -394,19 +470,24 @@ const Chat = () => {
           {/* Microphone: tap to toggle recording */}
           <button
             onClick={toggleRecording}
-            className={`${
-              isRecording ? 'bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
-            } text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-full transition-colors duration-200 flex items-center justify-center`}
-            title={isRecording ? 'Stop recording' : 'Start recording'}
+            className={`
+            text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-full transition-all duration-300 flex items-center justify-center
+            ${isRecording 
+              ? 'bg-blue-600 ring-4 ring-blue-400/40'   
+              : 'bg-gray-600 hover:bg-gray-700 ring-0'}`}
+              title={isRecording ? 'Stop recording' : 'Start recording'}
           >
+
             <MicrophoneIcon className="h-8 w-8" />
           </button>
 
           <button
             onClick={() => setTtsEnabled(v => !v)}
-            className={`${
-              ttsEnabled ? 'bg-violet-600' : 'bg-gray-600 hover:bg-gray-700'
-            } text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-full transition-colors duration-200 flex items-center justify-center`}
+            className={`
+            text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-full transition-all duration-300 flex items-center justify-center
+            ${ttsEnabled 
+              ? 'bg-blue-600 ring-4 ring-blue-400/40'   
+              : 'bg-gray-600 hover:bg-gray-700 ring-0'}`}
             title={ttsEnabled ? 'Disable speech output' : 'Enable speech output'}
           >
   <SpeakerWaveIcon className="h-8 w-8" />
