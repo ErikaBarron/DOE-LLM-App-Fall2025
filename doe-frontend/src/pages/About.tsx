@@ -104,7 +104,7 @@ const About: React.FC = () => {
                 <span className="text-xl font-bold text-white">DT</span>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Development Team</h3>
+                <h3 className="text-lg font-semibold text-white">Development Team Spring 2025</h3> 
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   <p className="text-white/70">Logan Margabandu</p>
                   <p className="text-white/70">Abdulrahman Zanawar</p>
@@ -112,6 +112,15 @@ const About: React.FC = () => {
                   <p className="text-white/70">Deryck Overturff</p>
                   <p className="text-white/70">Sheerinah Murad</p>
                   <p className="text-white/70">Muhammad Fahin</p>
+                </div> {/*//Added team member names as contributors for the Fall 2025 semester*/}
+                <h3 className="text-lg font-semibold text-white mt-6 mb-2">Development Team Fall 2025</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <p className="text-white/70">Shreyaa Arun</p>
+                  <p className="text-white/70">Erika Barron</p>
+                  <p className="text-white/70">Mariam Hamza</p>
+                  <p className="text-white/70">Josetta A. Reyes</p>
+                  <p className="text-white/70">Eslam M. Shamait</p>
+                  <p className="text-white/70">Jasmine K. Torres</p> 
                 </div>
               </div>
             </div>
