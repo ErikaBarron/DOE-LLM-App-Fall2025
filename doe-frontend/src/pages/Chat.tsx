@@ -57,11 +57,20 @@ const Chat = () => {
 
   // TTS toggle
   const [ttsEnabled, setTtsEnabled] = useState(false);
+  useEffect(() => {
+    if (!ttsEnabled) {
+      window.speechSynthesis.cancel(); // instantly stop all speaking
+    }
+  }, [ttsEnabled]);
 
   function speakText(text: string) {
-    if (!ttsEnabled) return;
-
     const synth = window.speechSynthesis;
+
+    // Stop any ongoing speech before restarting
+    synth.cancel();
+
+    if (!ttsEnabled) return;
+    
     const utter = new SpeechSynthesisUtterance(text);
 
     utter.rate = 1;
